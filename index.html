@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>School Portal</title>
+<style>
+body{font-family:Arial;background:#eef2f3}
+.box{background:#fff;padding:20px;margin:20px auto;width:90%;max-width:600px}
+button,input,select,textarea{width:100%;padding:8px;margin:6px}
+.hidden{display:none}
+</style>
+</head>
+
+<body>
+
+<!-- HOME -->
+<div class="box" id="home">
+<h2>Select Login</h2>
+<button onclick="openPage('teacher')">Teacher</button>
+<button onclick="openPage('parent')">Parent</button>
+<button onclick="openPage('student')">Student</button>
+</div>
+
+<!-- TEACHER -->
+<div class="box hidden" id="teacher">
+<h2>Teacher Panel</h2>
+
+<select id="classSelect">
+  <option>Class 1</option><option>Class 2</option><option>Class 3</option>
+  <option>Class 4</option><option>Class 5</option><option>Class 6</option>
+  <option>Class 7</option><option>Class 8</option><option>Class 9</option>
+  <option>Class 10</option>
+</select>
+
+<input id="roll" placeholder="Roll Number">
+<input id="name" placeholder="Student Name">
+<input id="att" placeholder="Attendance %">
+<input id="marks" placeholder="Marks">
+<textarea id="remark" placeholder="Teacher Remarks"></textarea>
+<textarea id="hw" placeholder="Homework"></textarea>
+
+<button onclick="saveStudent()">Save / Update Student</button>
+<button onclick="back()">Logout</button>
+</div>
+
+<!-- PARENT -->
+<div class="box hidden" id="parent">
+<h2>Parent View</h2>
+<input id="parentRoll" placeholder="Enter Roll Number">
+<button onclick="viewParent()">View</button>
+<div id="parentData"></div>
+<button onclick="back()">Logout</button>
+</div>
+
+<!-- STUDENT -->
+<div class="box hidden" id="student">
+<h2>Student View</h2>
+<input id="studentRoll" placeholder="Enter Roll Number">
+<button onclick="viewStudent()">View</button>
+<div id="studentData"></div>
+<button onclick="back()">Logout</button>
+</div>
+
+<script>
+let db = {};
+
+function openPage(id){
+  document.querySelectorAll('.box').forEach(b=>b.classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+}
+
+function back(){ openPage('home'); }
+
+function saveStudent(){
+  db[roll.value] = {
+    class: classSelect.value,
+    name: name.value,
+    att: att.value,
+    marks: marks.value,
+    remark: remark.value,
+    hw: hw.value
+  };
+  alert("Student details saved");
+}
+
+function viewParent(){
+  let s = db[parentRoll.value];
+  parentData.innerHTML = s ?
+   `<p><b>Name:</b> ${s.name}</p>
+    <p><b>Class:</b> ${s.class}</p>
+    <p><b>Attendance:</b> ${s.att}%</p>
+    <p><b>Marks:</b> ${s.marks}</p>
+    <p><b>Remarks:</b> ${s.remark}</p>`
+   : "No record found";
+}
+
+function viewStudent(){
+  let s = db[studentRoll.value];
+  studentData.innerHTML = s ?
+   `<p><b>Name:</b> ${s.name}</p>
+    <p><b>Attendance:</b> ${s.att}%</p>
+    <p><b>Marks:</b> ${s.marks}</p>
+    <p><b>Homework:</b> ${s.hw}</p>`
+   : "No record found";
+}
+</script>
+
+</body>
+</html>
